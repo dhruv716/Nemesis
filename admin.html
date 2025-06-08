@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEMESIS Admin Panel</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(ellipse farthest-corner at 80% 50%, #f4e7d3, #9a836b);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            background-color: #decfbc;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #422d00;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #422d00;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #8b6d4e;
+            border-radius: 5px;
+            background-color: #f0e2d0;
+            font-size: 16px;
+        }
+        button {
+            background-color: #422d00;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #5e4109;
+        }
+        .status {
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        .status-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .status-item {
+            margin-bottom: 5px;
+        }
+        .connected {
+            color: green;
+        }
+        .disconnected {
+            color: red;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success {
+            background-color: rgba(0, 128, 0, 0.2);
+            color: green;
+        }
+        .error {
+            background-color: rgba(255, 0, 0, 0.2);
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NEMESIS Admin Panel</h1>
+        
+        <div class="status" id="statusContainer">
+            <div class="status-title">System Status:</div>
+            <div class="status-item">Server: <span id="serverStatus">Checking...</span></div>
+            <div class="status-item">Gradio API: <span id="gradioStatus">Checking...</span></div>
+            <div class="status-item">Gradio URL: <span id="gradioUrl">Checking...</span></div>
+        </div>
+        
+        <div id="messageContainer" style="display: none;" class="message"></div>
+        
+        <div class="form-group">
+            <label for="gradioUrl">Update Gradio API URL:</label>
+            <input type="text" id="gradioUrlInput" placeholder="Enter new Gradio API URL">
+        </div>
+        
+        <button id="updateBtn">Update URL</button>
+    </div>
+
+    <script>
+        // Check server status on page load
+        document.addEventListener('DOMContentLoaded', checkStatus);
+        
+        // Set up update button
+        document.getElementById('updateBtn').addEventListener('click', updateGradioUrl);
+        
+        // Function to check server status
+        async function checkStatus() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/status');
+                const data = await response.json();
+                
+                document.getElementById('serverStatus').textContent = data.server;
+                
+                const gradioStatus = document.getElementById('gradioStatus');
+                gradioStatus.textContent = data.gradio_api;
+                gradioStatus.className = data.gradio_api === 'connected' ? 'connected' : 'disconnected';
+                
+                document.getElementById('gradioUrl').textContent = data.gradio_url;
+                document.getElementById('gradioUrlInput').value = data.gradio_url;
+            } catch (error) {
+                document.getElementById('serverStatus').textContent = 'disconnected';
+                document.getElementById('serverStatus').className = 'disconnected';
+                document.getElementById('gradioStatus').textContent = 'unavailable';
+                document.getElementById('gradioStatus').className = 'disconnected';
+                document.getElementById('gradioUrl').textContent = 'unavailable';
+                
+                showMessage('Error connecting to server. Is it running?', 'error');
+            }
+        }
+        
+        // Function to update Gradio URL
+        async function updateGradioUrl() {
+            const newUrl = document.getElementById('gradioUrlInput').value.trim();
+            
+            if (!newUrl) {
+                showMessage('Please enter a URL', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://127.0.0.1:5000/update-gradio-url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: newUrl }),
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage('Gradio API URL updated successfully!', 'success');
+                } else {
+                    showMessage(`Error: ${data.message}`, 'error');
+                }
+                
+                // Refresh status
+                setTimeout(checkStatus, 1000);
+            } catch (error) {
+                showMessage('Error connecting to server', 'error');
+            }
+        }
+        
+        // Function to show messages
+        function showMessage(text, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            messageContainer.textContent = text;
+            messageContainer.className = `message ${type}`;
+            messageContainer.style.display = 'block';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageContainer.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

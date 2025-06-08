@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEMESIS Chat</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* General Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Times New Roman", Times, serif;
+      }
+      .sidebar {
+        width: 300px;
+        background: #422e0baf;
+        color: #432703;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .sidebar-title {
+        font-size: 1.8rem;
+        color: #ffffff;
+        margin-bottom: 20px;
+      }
+
+      /* Remove the close button and unnecessary header section */
+      /* .sidebar-top,
+      .sidebar-header,
+      .close-btn {
+        display: none !important;
+      } */
+
+      .form-group {
+        margin-bottom: 15px;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-group label {
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+      }
+
+      .form-group select,
+      .form-group input {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #8b6d4e;
+        background-color: #f0e2d0;
+        color: #432703;
+        font-size: 0.95rem;
+      }
+
+      body {
+        display: flex;
+        height: 100vh;
+        background: #432703;
+      }
+
+      /* Left Sidebar */
+      .sidebar {
+        width: 300px;
+        background: #422e0baf;
+        color: #432703;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .sidebar-header h2 {
+        font-size: 1.5rem;
+        color: #ffffff;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: #d8c2ad;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .chat-history {
+        flex: 1;
+        overflow-y: auto;
+        margin-bottom: 20px;
+      }
+
+      .chat-history ul {
+        list-style: none;
+      }
+
+      .chat-history li {
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        background: rgba(255, 214, 159, 0.3);
+        color: #ffffff;
+      }
+
+      .chat-history li:hover {
+        background: rgba(242, 187, 176, 0.3);
+      }
+
+      .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ffffff;
+      }
+
+      .profile-section img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+
+      /* Middle Chat Area */
+      .chat-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: #d8c2ad;
+        padding: 20px;
+      }
+
+      .chat-header {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+
+      .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        margin-bottom: 20px;
+      }
+
+      .chat-messages .message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        background: rgba(86, 49, 1, 0.2);
+      }
+
+      .chat-input {
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #613e00;
+        border-radius: 5px;
+      }
+
+      .chat-input button {
+        padding: 10px 20px;
+        background: #432703;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .chat-input button:hover {
+        background: #bfab90;
+      }
+
+      .upload-btn {
+        background: #ab8b62;
+        color: #432703;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+
+      .upload-btn:hover {
+        background: #bfab90;
+      }
+
+      /* Voice Button */
+      .voice-btn {
+        background: none;
+        border: none;
+        color: #432703;
+        font-size: 1.2rem;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+      .send-btn {
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+      <h2 class="sidebar-title">NEMESIS</h2>
+
+      <div class="form-group">
+        <label for="caseType">Case Type</label>
+        <select id="caseType">
+          <option value="Civil Suit" selected>Civil Suit</option>
+          <option value="Criminal Trial">Criminal Trial</option>
+          <option value="Constitutional Matter">Constitutional Matter</option>
+          <option value="Corporate Dispute">Corporate Dispute</option>
+          <option value="Family Law">Family Law</option>
+          <option value="Property Dispute">Property Dispute</option>
+          <option value="Consumer Complaint">Consumer Complaint</option>
+          <option value="Administrative Proceeding">Administrative Proceeding</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="clientRole">Your Client's Position</label>
+        <select id="clientRole">
+          <option value="Plaintiff/Petitioner" selected>Plaintiff/Petitioner</option>
+          <option value="Defense Attorney">Defense Attorney</option>
+          <option value="Prosecutor">Prosecutor</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="actsTextbox">Relevant Acts and Codes</label>
+        <input
+          type="text"
+          id="actsTextbox"
+          placeholder="IPC, CRPC, Evidence act, etc."
+          value="Indian Penal Code, Code of Criminal Procedure"
+        />
+      </div>
+
+      <div class="chat-history">
+        <h3 style="color: #ffffff; margin-bottom: 10px">Chat History</h3>
+        <ul id="chatHistoryList">
+          <!-- Chat history will be populated here -->
+        </ul>
+      </div>
+
+      <div class="profile-section">
+        <img src="images/DA_woman.webp" alt="Profile" />
+        <span>My Profile</span>
+      </div>
+    </div>
+
+    <!-- Middle Chat Area -->
+    <div class="chat-area">
+      <div class="chat-header">Chat</div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="message">
+          Welcome to NEMESIS! How can I assist you today?
+        </div>
+      </div>
+      <div class="chat-input">
+        <input
+          type="text"
+          id="userInput"
+          placeholder="Ask me anything about law..."
+        />
+        <!-- Voice Button -->
+        <button class="voice-btn">
+          <i class="bx bx-microphone"></i>
+        </button>
+        <button class="upload-btn">
+          <i class="bx bx-upload"></i>
+        </button>
+        <button id="sendBtn">Send</button>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript for interactivity
+      const sendBtn = document.getElementById("sendBtn");
+      const chatInput = document.getElementById("userInput");
+      const chatMessages = document.querySelector(".chat-messages");
+      
+      // Store conversation history
+      let conversationHistory = [];
+
+      // Function to add a chat session to history
+      function addChatToHistory(message) {
+        const historyList = document.getElementById("chatHistoryList");
+        const listItem = document.createElement("li");
+        
+        // Limit the message length for history display
+        const displayText = message.length > 30 ? message.substring(0, 30) + "..." : message;
+        listItem.textContent = displayText;
+        
+        // Add click handler to load this conversation (for future implementation)
+        listItem.addEventListener("click", () => {
+          alert("Loading this conversation... (Feature coming soon)");
+        });
+        
+        historyList.prepend(listItem);
+      }
+
+      // Function to send a message to the backend and display the response
+      async function sendMessage() {
+        const userInput = chatInput.value.trim();
+        if (!userInput) return; // Don't send empty messages
+
+        // Get form values
+        const caseType = document.getElementById("caseType").value;
+        const clientPosition = document.getElementById("clientRole").value;
+        const relevantActs = document.getElementById("actsTextbox").value;
+
+        // Display the user's message
+        const userMessageElement = document.createElement("div");
+        userMessageElement.classList.add("message");
+        userMessageElement.textContent = `You: ${userInput}`;
+        chatMessages.appendChild(userMessageElement);
+
+        // Show loading indicator
+        const loadingElement = document.createElement("div");
+        loadingElement.classList.add("message");
+        loadingElement.textContent = "NEMESIS is thinking...";
+        chatMessages.appendChild(loadingElement);
+
+        try {
+          // Send the input to the backend
+          const response = await fetch("http://127.0.0.1:5000/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              message: userInput,
+              case_type: caseType,
+              relevant_acts: relevantActs,
+              client_position: clientPosition,
+              chatbot: conversationHistory
+            }),
+          });
+
+          // Remove loading indicator
+          chatMessages.removeChild(loadingElement);
+
+          // Parse the chatbot's response
+          const data = await response.json();
+
+          // Update conversation history
+          conversationHistory.push([userInput, data.response]);
+          
+          // Add to chat history sidebar if this is a new conversation
+          if (conversationHistory.length === 1) {
+            addChatToHistory(userInput);
+          }
+
+          // Display the chatbot's response
+          const botMessageElement = document.createElement("div");
+          botMessageElement.classList.add("message");
+          botMessageElement.textContent = `NEMESIS: ${data.response}`;
+          chatMessages.appendChild(botMessageElement);
+
+        } catch (error) {
+          // Remove loading indicator
+          chatMessages.removeChild(loadingElement);
+          
+          // Display error message
+          const errorElement = document.createElement("div");
+          errorElement.classList.add("message");
+          errorElement.textContent = "Error: Could not connect to NEMESIS. Please check your connection and try again.";
+          chatMessages.appendChild(errorElement);
+          
+          console.error("Error:", error);
+        }
+
+        // Clear the input field
+        chatInput.value = "";
+
+        // Scroll to the bottom of the chat
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Add event listener to the send button
+      sendBtn.addEventListener("click", () => {
+        sendMessage();
+      });
+
+      // Allow pressing "Enter" to send a message
+      chatInput.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      });
+    </script>
+  </body>
+</html>
