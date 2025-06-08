@@ -1,4 +1,4 @@
-# NEMESIS Legal AI Assistant
+# NEMESIS Legal Aversary using GenAI
 
 An AI-powered legal adversary for Indian Law, helping legal professionals train and improve their argumentation skills.
 
