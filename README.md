@@ -6,6 +6,7 @@ An AI-powered legal adversary for Indian Law, helping legal professionals train 
 
 ```
 nemesis/
+├── nemesis_run.ipynb       # model run with gradio interface on colab
 ├── app.py                  # Flask backend server
 ├── requirements.txt        # Python dependencies
 ├── index.html              # Landing page
@@ -15,20 +16,26 @@ nemesis/
 
 ## Setup Instructions
 
-### 1. Install Python Dependencies
+### 1. Run model on colab
+
+Run nemesis_run.ipynb on google colab using T4 GPU, connect to mounted google drive at dhruv.pai167@gmail.com, then get the gradio API link.
+
+### 2. Install Python Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Start the Flask Backend Server
+### 3. Start the Flask Backend Server
+
+Copy the link from Gradio API and paste it in required space.
 
 ```bash
 python app.py
 ```
 This will start the server on http://127.0.0.1:5000
 
-### 3. Serve the HTML Files
+### 4. Serve the HTML Files
 
 You can use any simple HTTP server to serve the HTML files. For example, using Python's built-in HTTP server:
 
@@ -39,7 +46,7 @@ python -m http.server 8000
 
 This will serve your website at http://localhost:8000
 
-### 4. Access the Application
+### 5. Access the Application
 
 Open your browser and go to http://localhost:8000 to access the NEMESIS application.
 
